@@ -15,6 +15,54 @@ apps:
       usr/share/bash-completion/completions/fwupdtool
 
 parts:
+  libefivar-dev:
+    plugin: make
+    source: https://github.com/rhboot/efivar.git
+    source-type: git
+    build-packages:
+      - libpopt-dev
+    organize:
+      usr/lib64: usr/lib/x86_64-linux-gnu
+  libfwup-dev:
+    plugin: make
+    source: https://github.com/rhboot/fwupdate.git
+    source-type: git
+    make-parameters:
+      - EFIDIR=ubuntu
+      - GNUEFIDIR=/usr/lib
+      - LIBDIR=$SNAPCRAFT_STAGE/usr/lib/x86_64-linux-gnu
+      - libdir=/usr/lib/x86_64-linux-gnu
+      - PKG_CONFIG_PATH=$SNAPCRAFT_STAGE/usr/lib/x86_64-linux-gnu/pkgconfig
+      - --eval=export PKG_CONFIG_PATH
+    build-packages:
+      - elfutils
+      - gnu-efi
+      - libasm1
+      - libdw1
+      - libefivar-dev
+      - libsmbios-dev
+      - libsmbios2v5
+    after: [libefivar-dev]
+  appstream-glib-dev:
+    plugin: meson
+    meson-parameters: [--prefix=/usr, -Dgtkdoc=false]
+    source: https://github.com/hughsie/appstream-glib
+    source-type: git
+    build-packages:
+      - intltool
+      - libarchive-dev
+      - libgcab-dev
+      - libgdk-pixbuf2.0-dev
+      - libgirepository1.0-dev
+      - libglib2.0-dev
+      - libgtk-3-dev
+      - libjson-glib-dev
+      - libsoup2.4-dev
+      - libsqlite3-dev
+      - libyaml-dev
+      - uuid-dev
+      - xmlto
+    after: [libfwup-dev]
   fwupd:
     plugin: meson
     meson-parameters: [--prefix=/usr, --libexecdir=/usr/lib, -Dgtkdoc=false, -Dsnap=true]
@@ -99,7 +147,7 @@ parts:
       - -usr/lib/gnupg2
       - -usr/lib/sasl2
       - -usr/lib/systemd
-      - -usr/lib/x86_64-linux-gnu/audit
+      - -usr/lib/*/audit
       - -usr/share/glib-2.0/schemas
       - -usr/share/X11
       - -usr/include
