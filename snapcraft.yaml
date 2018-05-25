@@ -54,13 +54,15 @@ parts:
     plugin: meson
     meson-parameters: [--prefix=/usr, -Dgtk-doc=false, -Dintrospection=false, -Dman=false, -Drpm=false]
     #hack for lack of new enough meson (https://bugs.launchpad.net/snapcraft/+bug/1753250)
-    prepare: |
+    override-build: |
       apt-get install -y python-setuptools
       pip3 install meson
+      snapcraftctl build
     source: https://github.com/hughsie/appstream-glib
     source-type: git
     build-packages:
       - python3-pip
+      - gperf
       - intltool
       - libarchive-dev
       - libgcab-dev
@@ -72,6 +74,7 @@ parts:
       - libsoup2.4-dev
       - libsqlite3-dev
       - libyaml-dev
+      - libstemmer-dev
       - uuid-dev
       - xmlto
     after: [libfwup-dev]
@@ -97,6 +100,10 @@ parts:
     source: https://github.com/hughsie/fwupd
     source-branch: wip/superm1/noinst
     source-type: git
+    override-pull: |
+      snapcraftctl pull
+      # we don't need systemd 231 to build, only for udev rules to run
+      sed "s/systemd = dependency('systemd', version.*/systemd = dependency('systemd')/" -i meson.build
     override-build: |
       snapcraftctl build
       echo $(git describe HEAD) > $SNAPCRAFT_STAGE/version
@@ -144,7 +151,6 @@ parts:
       - libarchive13
       - libc6
       - libgusb2
-      - libsmbios-c2
       - libgpgme11
       - libelf1
       - libcolorhug2
