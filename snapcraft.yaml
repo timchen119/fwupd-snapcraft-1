@@ -23,6 +23,11 @@ parts:
       - libpopt-dev
     organize:
       usr/lib64: usr/lib/x86_64-linux-gnu
+      usr/lib: usr/lib/i386-linux-gnu
+    prime:
+     - -usr/include
+     - -usr/bin
+     - -usr/share/man
   #adjust the paths from libefivar
   libefivar-fixpkgconfig:
     plugin: make
@@ -49,6 +54,9 @@ parts:
       - libefivar-dev
       - libsmbios-dev
       - libsmbios2v5
+    prime:
+      - -usr/lib/debug
+      - -usr/lib/systemd
     after: [libefivar-fixpkgconfig]
   appstream-glib-dev:
     plugin: meson
@@ -77,6 +85,13 @@ parts:
       - libstemmer-dev
       - uuid-dev
       - xmlto
+    prime:
+      - -usr/bin
+      - -usr/include
+      - -usr/lib/*/asb-plugins-5
+      - -usr/share/bash-completion
+      - -usr/share/aclocal
+      - -usr/lib/*/pkgconfig
     after: [libfwup-dev]
   libsmbios:
     plugin: autotools
@@ -93,10 +108,16 @@ parts:
       - libtool
       - help2man
       - autopoint
+    prime:
+      - -include/
+      - -lib/pkgconfig
+      - -lib/python3.5
+      - -sbin/
+      - -share/
     after: [appstream-glib-dev]
   fwupd:
     plugin: meson
-    meson-parameters: [--prefix=/usr, --libexecdir=/usr/lib, -Dgtkdoc=false, -Ddaemon=false, -Dsystemd=false, -Dpkcs7=false]
+    meson-parameters: [--prefix=/usr, --libexecdir=/usr/lib, -Dgtkdoc=false, -Ddaemon=false, -Dintrospection=false, -Dsystemd=false, -Dpkcs7=false]
     source: https://github.com/hughsie/fwupd
     source-branch: wip/superm1/noinst
     source-type: git
@@ -143,16 +164,16 @@ parts:
       - umockdev
       - valac
     stage-packages:
-      - libusb-1.0-0
-      - libarchive13
-      - libc6
-      - libgusb2
-      - libgpgme11
-      - libelf1
-      - libcolorhug2
-      - libgudev-1.0-0
-      - libjson-glib-1.0-0
-      - liblzma5
+#      - libusb-1.0-0
+#      - libarchive13
+#      - libc6
+#      - libgusb2
+#      - libgpgme11
+#      - libelf1
+#      - libcolorhug2
+#      - libgudev-1.0-0
+#      - libjson-glib-1.0-0
+#      - liblzma5
     prime:
       - -usr/bin
       - -usr/sbin
@@ -185,6 +206,12 @@ parts:
       - -usr/share/polkit-1
       - -usr/share/vala
       - -usr/share/doc
+      - -usr/share/gnupg2
+      - -usr/share/info
+      - -usr/share/gir-1.0
+      - -usr/share/upstart
+      - -usr/lib/*/gio
+      - -usr/lib/*/glib-2.0
     after: [libsmbios]
   fwupdtool-wrapper:
     plugin: dump
