@@ -163,7 +163,7 @@ parts:
       - udev
       - umockdev
       - valac
-    stage-packages:
+#    stage-packages:
 #      - libusb-1.0-0
 #      - libarchive13
 #      - libc6
