@@ -61,6 +61,8 @@ parts:
       - -usr/src
       - -usr/share
       - -usr/lib/*/pkgconfig
+      - -usr/include
+      - -usr/bin
     after: [libefivar-fixpkgconfig]
   appstream-glib-dev:
     plugin: meson
@@ -91,9 +93,14 @@ parts:
       - xmlto
     stage-packages:
       - libarchive13
+      - libgcab-1.0-0
+      - libsoup2.4-1
+      - libstemmer0d
+      - libgdk-pixbuf2.0-0
     prime:
       - -usr/bin
       - -usr/include
+      - -usr/share/doc
       - -usr/lib/*/asb-plugins-5
       - -usr/share/bash-completion
       - -usr/share/aclocal
@@ -125,7 +132,7 @@ parts:
     after: [appstream-glib-dev]
   fwupd:
     plugin: meson
-    meson-parameters: [--prefix=/usr, --libexecdir=/usr/lib, -Dgtkdoc=false, -Ddaemon=false, -Dintrospection=false, -Dsystemd=false, -Dpkcs7=false]
+    meson-parameters: [--prefix=/usr, --libexecdir=/usr/lib, -Dgtkdoc=false, -Ddaemon=false, -Dintrospection=false, -Dsystemd=false, -Dpkcs7=false, -Dman=false]
     source: https://github.com/hughsie/fwupd
     source-branch: wip/superm1/noinst
     source-type: git
@@ -133,15 +140,11 @@ parts:
       snapcraftctl build
       echo $(git describe HEAD) > $SNAPCRAFT_STAGE/version
     build-packages:
-      - fontconfig
-      - fonts-dejavu
       - gcab
       - gettext
       - gir1.2-pango-1.0
       - gnutls-bin
       - gnutls-dev
-      - gobject-introspection
-      - help2man
       - libarchive-dev
       - libcairo-dev
       - libcairo-gobject2
@@ -150,26 +153,20 @@ parts:
       - libelf-dev
       - libfreetype6-dev
       - libgcab-dev
-      - libgirepository1.0-dev
       - libglib2.0-dev
       - libgpgme11-dev
       - libgudev-1.0-dev
       - libgusb-dev
       - libjson-glib-dev
-      - libpolkit-gobject-1-dev
       - libsoup2.4-dev
       - libsqlite3-dev
       - libtool-bin
       - locales
       - meson
       - pkg-config
-      - policykit-1
       - python3-gi-cairo
       - python3-pil
       - python3-requests
-      - systemd
-      - udev
-      - umockdev
       - valac
     stage-packages:
       - libassuan0
