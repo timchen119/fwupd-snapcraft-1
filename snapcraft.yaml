@@ -140,6 +140,7 @@ parts:
     plugin: meson
     meson-parameters: [--prefix=/usr,
                        --libexecdir=/usr/lib,
+                       -Dtests=false,
                        -Ddaemon=false,
                        -Dgtkdoc=false,
                        -Dplugin_colorhug=false,
@@ -151,7 +152,7 @@ parts:
                        -Dpkcs7=false,
                        -Dgpg=false]
     source: https://github.com/hughsie/fwupd
-    source-branch: wip/superm1/noinst
+    source-branch: wip/hughsie/snap-crackle-pop
     source-type: git
     override-build: |
       snapcraftctl build
