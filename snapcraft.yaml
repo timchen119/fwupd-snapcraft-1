@@ -28,6 +28,7 @@ parts:
      - -usr/include
      - -usr/bin
      - -usr/share/man
+     - -usr/lib/*/pkgconfig
   #adjust the paths from libefivar
   libefivar-fixpkgconfig:
     plugin: make
@@ -57,6 +58,9 @@ parts:
     prime:
       - -usr/lib/debug
       - -usr/lib/systemd
+      - -usr/src
+      - -usr/share
+      - -usr/lib/*/pkgconfig
     after: [libefivar-fixpkgconfig]
   appstream-glib-dev:
     plugin: meson
@@ -85,6 +89,8 @@ parts:
       - libstemmer-dev
       - uuid-dev
       - xmlto
+    stage-packages:
+      - libarchive13
     prime:
       - -usr/bin
       - -usr/include
@@ -92,6 +98,7 @@ parts:
       - -usr/share/bash-completion
       - -usr/share/aclocal
       - -usr/lib/*/pkgconfig
+      - -usr/share/installed-tests
     after: [libfwup-dev]
   libsmbios:
     plugin: autotools
@@ -114,6 +121,7 @@ parts:
       - -lib/python3.5
       - -sbin/
       - -share/
+      - -etc/
     after: [appstream-glib-dev]
   fwupd:
     plugin: meson
@@ -163,17 +171,15 @@ parts:
       - udev
       - umockdev
       - valac
-#    stage-packages:
-#      - libusb-1.0-0
-#      - libarchive13
-#      - libc6
-#      - libgusb2
-#      - libgpgme11
-#      - libelf1
-#      - libcolorhug2
-#      - libgudev-1.0-0
-#      - libjson-glib-1.0-0
-#      - liblzma5
+    stage-packages:
+      - libassuan0
+      - liblcms2-2
+      - libelf1
+      - libgpgme11
+      - libjson-glib-1.0-0
+      - libcolorhug2
+      - libgusb2
+      - libgudev-1.0-0
     prime:
       - -usr/bin
       - -usr/sbin
@@ -212,6 +218,7 @@ parts:
       - -usr/share/upstart
       - -usr/lib/*/gio
       - -usr/lib/*/glib-2.0
+      - -usr/lib/*/pkgconfig
     after: [libsmbios]
   fwupdtool-wrapper:
     plugin: dump
