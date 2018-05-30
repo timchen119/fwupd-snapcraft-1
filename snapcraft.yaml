@@ -121,15 +121,12 @@ parts:
     source: https://github.com/dell/libsmbios
     source-type: git
     build-packages:
-      - doxygen
-      - graphviz
       - python3
       - libxml2-dev
       - pkg-config
       - autoconf
       - automake
       - libtool
-      - help2man
       - autopoint
     prime:
       - -include/
