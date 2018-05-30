@@ -138,7 +138,18 @@ parts:
     after: [appstream-glib-dev]
   fwupd:
     plugin: meson
-    meson-parameters: [--prefix=/usr, --libexecdir=/usr/lib, -Dgtkdoc=false, -Ddaemon=false, -Dintrospection=false, -Dsystemd=false, -Dpkcs7=false, -Dman=false]
+    meson-parameters: [--prefix=/usr,
+                       --libexecdir=/usr/lib,
+                       -Ddaemon=false,
+                       -Dgtkdoc=false,
+                       -Dplugin_colorhug=false,
+                       -Dplugin_uefi_labels=false,
+                       -Dintrospection=false,
+                       -Dsystemd=false,
+                       -Dman=false,
+                       -Dconsolekit=false,
+                       -Dpkcs7=false,
+                       -Dgpg=false]
     source: https://github.com/hughsie/fwupd
     source-branch: wip/superm1/noinst
     source-type: git
@@ -154,8 +165,6 @@ parts:
       - libarchive-dev
       - libcairo-dev
       - libcairo-gobject2
-      - libcolord-dev
-      - libcolorhug-dev
       - libelf-dev
       - libfreetype6-dev
       - libgcab-dev
@@ -180,7 +189,6 @@ parts:
       - libelf1
       - libgpgme11
       - libjson-glib-1.0-0
-      - libcolorhug2
       - libgusb2
       - libgudev-1.0-0
     prime:
