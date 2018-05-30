@@ -96,14 +96,10 @@ parts:
     after: [appstream-glib-dev]
   fwupd:
     plugin: meson
-    meson-parameters: [--prefix=/usr, --libexecdir=/usr/lib, -Dgtkdoc=false, -Dsnap=true]
+    meson-parameters: [--prefix=/usr, --libexecdir=/usr/lib, -Dgtkdoc=false, -Ddaemon=false, -Dsystemd=false, -Dpkcs7=false]
     source: https://github.com/hughsie/fwupd
     source-branch: wip/superm1/noinst
     source-type: git
-    override-pull: |
-      snapcraftctl pull
-      # we don't need systemd 231 to build, only for udev rules to run
-      sed "s/systemd = dependency('systemd', version.*/systemd = dependency('systemd')/" -i meson.build
     override-build: |
       snapcraftctl build
       echo $(git describe HEAD) > $SNAPCRAFT_STAGE/version
