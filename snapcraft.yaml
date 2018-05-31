@@ -8,6 +8,9 @@ description: |
 grade: devel
 confinement: classic
 
+architectures:
+  - amd64
+
 apps:
   fwupdtool:
     command: fwupdtool.wrapper
@@ -36,6 +39,26 @@ parts:
     make-parameters:
       - SNAPCRAFT_STAGE=$SNAPCRAFT_STAGE
     after: [libefivar-dev]
+  libsmbios:
+    plugin: autotools
+    source: https://github.com/dell/libsmbios
+    source-type: git
+    build-packages:
+      - python3
+      - libxml2-dev
+      - pkg-config
+      - autoconf
+      - automake
+      - libtool
+      - autopoint
+    prime:
+      - -include/
+      - -lib/pkgconfig
+      - -lib/python3.5
+      - -sbin/
+      - -share/
+      - -etc/
+      - -lib/*.a
   libfwup-dev:
     plugin: make
     source: https://github.com/rhboot/fwupdate.git
@@ -52,9 +75,6 @@ parts:
       - gnu-efi
       - libasm1
       - libdw1
-      - libefivar-dev
-      - libsmbios-dev
-      - libsmbios2v5
     prime:
       - -usr/lib/debug
       - -usr/lib/systemd
@@ -63,15 +83,22 @@ parts:
       - -usr/lib/*/pkgconfig
       - -usr/include
       - -usr/bin
-    after: [libefivar-fixpkgconfig]
+    after: [libsmbios, libefivar-fixpkgconfig]
+  meson:
+    plugin: python
+    source: https://github.com/mesonbuild/meson.git
+    source-tag: 0.46.1
+    build-packages:
+      - ninja-build
+    prime:
+      - -bin
+      - -etc
+      - -lib
+      - -share
+      - -usr
   appstream-glib-dev:
     plugin: meson
     meson-parameters: [--prefix=/usr, -Dgtk-doc=false, -Dintrospection=false, -Dman=false, -Drpm=false]
-    #hack for lack of new enough meson (https://bugs.launchpad.net/snapcraft/+bug/1753250)
-    override-build: |
-      apt-get install -y python-setuptools
-      pip3 install meson
-      snapcraftctl build
     source: https://github.com/hughsie/appstream-glib
     source-type: git
     build-packages:
@@ -115,27 +142,7 @@ parts:
       - -usr/share/glib-2.0/schemas
       - -usr/share/lintian
       - -usr/share/man
-    after: [libfwup-dev]
-  libsmbios:
-    plugin: autotools
-    source: https://github.com/dell/libsmbios
-    source-type: git
-    build-packages:
-      - python3
-      - libxml2-dev
-      - pkg-config
-      - autoconf
-      - automake
-      - libtool
-      - autopoint
-    prime:
-      - -include/
-      - -lib/pkgconfig
-      - -lib/python3.5
-      - -sbin/
-      - -share/
-      - -etc/
-    after: [appstream-glib-dev]
+    after: [meson]
   fwupd:
     plugin: meson
     meson-parameters: [--prefix=/usr,
@@ -161,13 +168,8 @@ parts:
       - gcab
       - gettext
       - gir1.2-pango-1.0
-      - gnutls-bin
-      - gnutls-dev
       - libarchive-dev
-      - libcairo-dev
-      - libcairo-gobject2
       - libelf-dev
-      - libfreetype6-dev
       - libgcab-dev
       - libglib2.0-dev
       - libgpgme11-dev
@@ -176,13 +178,8 @@ parts:
       - libjson-glib-dev
       - libsoup2.4-dev
       - libsqlite3-dev
-      - libtool-bin
       - locales
-      - meson
       - pkg-config
-      - python3-gi-cairo
-      - python3-pil
-      - python3-requests
       - valac
     stage-packages:
       - libassuan0
@@ -230,7 +227,7 @@ parts:
       - -usr/share/upstart
       - -usr/lib/*/glib-2.0
       - -usr/lib/*/pkgconfig
-    after: [libsmbios]
+    after: [appstream-glib-dev, libfwup-dev]
   fwupdtool-wrapper:
     plugin: dump
     source: .
