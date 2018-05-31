@@ -165,6 +165,7 @@ parts:
       snapcraftctl build
       echo $(git describe HEAD) > $SNAPCRAFT_STAGE/version
     build-packages:
+      - bash-completion
       - gcab
       - gettext
       - gir1.2-pango-1.0
