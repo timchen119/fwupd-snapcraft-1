@@ -124,6 +124,7 @@ parts:
       - libsoup2.4-1
       - libstemmer0d
       - libgdk-pixbuf2.0-0
+      - libc6
     prime:
       - -usr/bin
       - -usr/include
@@ -190,6 +191,8 @@ parts:
       - libjson-glib-1.0-0
       - libgusb2
       - libgudev-1.0-0
+      - libc6
+      - liblzma5
     prime:
       - -usr/bin
       - -usr/sbin
